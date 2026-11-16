@@ -13,4 +13,8 @@ Introduction content will be added here.
 
 ## Research
 
-Research content will be added here.
+### CO₂ Exposure in Private Vehicles: Evidence from Naturalistic Driving
+
+Project details will be added here.
+
+[CO₂ exposure explorer]({{ '/co2-exposure-explorer/' | relative_url }})

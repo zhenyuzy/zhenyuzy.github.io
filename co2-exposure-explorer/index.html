@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="An in-vehicle CO2 concentration-time exposure scenario explorer based on inter-trip and within-trip models"
+    />
+    <title>In-vehicle CO₂ exposure scenario explorer</title>
+    <link rel="stylesheet" href="styles.css?v=20261116-4" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div>
+        <h1>In-vehicle CO₂ exposure scenario explorer</h1>
+        <p class="header-copy">
+          Link incomplete cabin reset between trips with within-trip CO₂ development to compare daily or weekly travel scenarios.
+        </p>
+      </div>
+      <div class="model-badge" aria-label="Model type">
+        <span>Population-level</span>
+        <strong>Exploratory estimate</strong>
+      </div>
+    </header>
+
+    <main>
+      <section class="scope-note" aria-label="Interpretation range">
+        <strong>Interpretation range</strong>
+        <span>
+          Outputs are in-vehicle concentration–time exposure (ppm·min) for trip durations from 1 to 60 min.
+        </span>
+      </section>
+
+      <div class="workspace">
+        <aside class="scenario-column">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Scenario inputs</p>
+              <h2>Driving schedule</h2>
+            </div>
+            <button id="resetScenario" class="button button-quiet" type="button">Reset example</button>
+          </div>
+
+          <div class="simulation-card">
+            <div class="field-grid">
+              <div class="field">
+                <label for="simulationDays">Simulation period</label>
+                <select id="simulationDays">
+                  <option value="1">One day</option>
+                  <option value="7">Seven-day repeated schedule</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="firstInitial">Day 1, Trip 1 initial CO₂</label>
+                <div class="input-with-unit">
+                  <input id="firstInitial" type="number" min="400" max="6000" step="50" value="600" />
+                  <span>ppm</span>
+                </div>
+              </div>
+            </div>
+            <p>
+              Day 1 begins from the manual value. In seven-day mode, the daily schedule is repeated seven times, and each later morning is estimated from the preceding day’s final trip and the overnight interval below.
+            </p>
+            <div id="overnightSettings" class="overnight-settings" hidden>
+              <strong>Interval from the last trip to the next day’s first trip</strong>
+              <div class="field-grid">
+                <div class="field">
+                  <label for="overnightDuration">Overnight parking duration</label>
+                  <div class="input-with-unit">
+                    <input id="overnightDuration" type="number" min="0.5" max="24" step="0.5" value="12" />
+                    <span>h</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="overnightEnvironment">Environment</label>
+                  <select id="overnightEnvironment">
+                    <option value="Likely outdoor">Outdoor</option>
+                    <option value="Likely indoor">Indoor</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="tripList" class="trip-list" aria-live="polite"></div>
+
+          <button id="addTrip" class="button button-primary button-full" type="button">
+            + Add a driving trip
+          </button>
+        </aside>
+
+        <section class="results-column">
+          <div class="section-heading result-heading">
+            <div>
+              <p class="section-kicker">Scenario estimate</p>
+              <h2>Exposure results</h2>
+            </div>
+            <span id="scenarioStatus" class="status-pill">3 trips</span>
+          </div>
+
+          <div class="kpi-grid" aria-label="Exposure metrics">
+            <article class="kpi-card kpi-primary">
+              <span>Total concentration–time exposure</span>
+              <strong id="totalExposure">—</strong>
+              <small>ppm·min</small>
+            </article>
+            <article class="kpi-card">
+              <span>Time-weighted mean during travel</span>
+              <strong id="dailyMean">—</strong>
+              <small>ppm</small>
+            </article>
+            <article class="kpi-card">
+              <span>At or above 1,000 ppm</span>
+              <strong id="minutes1000">—</strong>
+              <small>min · indoor standard</small>
+            </article>
+            <article class="kpi-card">
+              <span>At or above 2,000 ppm</span>
+              <strong id="minutes2000">—</strong>
+              <small>min · cognitive-impact reference</small>
+            </article>
+            <article class="kpi-card">
+              <span>Office-workday exposure equivalents</span>
+              <strong id="officeEquivalent">—</strong>
+              <small>200,000 ppm·min each</small>
+            </article>
+          </div>
+
+          <div id="warningList" class="warning-list" aria-live="polite"></div>
+
+          <article class="chart-card">
+            <div class="chart-heading">
+              <div>
+                <h3 id="trajectoryTitle">Predicted in-vehicle CO₂ trajectory</h3>
+                <p id="trajectorySubtitle">The horizontal axis is cumulative driving time; parking durations are excluded.</p>
+              </div>
+              <div class="legend" aria-label="Ventilation legend">
+                <span><i class="legend-auto"></i>Auto</span>
+                <span><i class="legend-outside"></i>Outside Air</span>
+                <span><i class="legend-recirc"></i>Recirculation</span>
+              </div>
+            </div>
+            <div id="trajectoryChart" class="chart-shell"></div>
+          </article>
+
+          <article class="chart-card">
+            <div class="chart-heading">
+              <div>
+                <h3 id="contributionTitle">Contribution to total exposure</h3>
+                <p id="contributionSubtitle">Bar length represents ppm·min and the label shows the share of the scenario total.</p>
+              </div>
+            </div>
+            <div id="contributionBars" class="contribution-bars"></div>
+          </article>
+
+          <article class="table-card">
+            <div class="chart-heading">
+              <div>
+                <h3>Trip-level results</h3>
+                <p>Chained initial CO₂ values are fixed-effect predictions for an average vehicle.</p>
+              </div>
+            </div>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Trip</th>
+                    <th>Initial</th>
+                    <th>End</th>
+                    <th>Mean</th>
+                    <th>Exposure</th>
+                    <th>≥1,000</th>
+                    <th>≥2,000</th>
+                    <th>P(initial ≥1,000)</th>
+                  </tr>
+                </thead>
+                <tbody id="resultRows"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <details class="method-card">
+            <summary>Models and calculations</summary>
+            <div class="method-content">
+              <p>
+                <strong>Inter-trip model:</strong> next-trip initial CO₂ is estimated from previous-trip end CO₂, parking duration, and indoor/outdoor parking, with vehicle represented by a random intercept during model fitting. The webpage uses fixed-effect predictions for an average vehicle.
+              </p>
+              <p>
+                <strong>Within-trip model:</strong> the unified 0–60 min GAMM predicts minute-level CO₂ from initial CO₂, occupancy, ventilation, vehicle type, and their time-varying contributions. Vehicle and trip random effects are excluded from webpage predictions.
+              </p>
+              <p>
+                Trip exposure is integrated using the trapezoidal rule. Parking affects the next initial concentration but is not included in the in-vehicle exposure total. Warnings identify sparse combinations and extrapolation beyond observed joint support.
+              </p>
+            </div>
+          </details>
+
+          <section class="reference-card" aria-labelledby="referenceHeading">
+            <p class="section-kicker">Exposure context</p>
+            <h3 id="referenceHeading">Office-workday reference</h3>
+            <p>
+              Approximately <strong>200,000 ppm·min</strong> accumulated during a typical office workday was reported by Gall et al. (2016). The “office-workday exposure equivalents” metric divides the scenario total by this reference value.
+            </p>
+            <p class="citation">
+              Gall, E. T., Cheung, T., Luhung, I., Schiavon, S., &amp; Nazaroff, W. W. (2016). Real-time monitoring of personal exposures to carbon dioxide. <em>Building and Environment, 104</em>, 59–67.
+              <a href="https://doi.org/10.1016/j.buildenv.2016.04.021" target="_blank" rel="noreferrer">https://doi.org/10.1016/j.buildenv.2016.04.021</a>
+            </p>
+          </section>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <span>TRD CO₂ research prototype</span>
+      <span id="modelMeta">Loading model data…</span>
+    </footer>
+
+    <script src="data/model-data.js?v=20261116-4"></script>
+    <script src="app.js?v=20261116-4"></script>
+  </body>
+</html>
