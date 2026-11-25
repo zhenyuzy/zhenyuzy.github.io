@@ -1,0 +1,88 @@
+vision:
+  title: "Understanding Humans, Enhancing Everyday Life"
+  description: >-
+    My research focuses on understanding human states and behaviors in
+    real-world contexts and exploring how emerging technologies can enhance
+    human well-being, performance, and everyday experiences.
+
+tracks:
+  - id: understanding
+    title: "Understanding"
+    question: "How do humans experience, respond to, and interact with the world?"
+    description: >-
+      I investigate how humans experience, respond to, and interact with their
+      physical and technological environments, leveraging empirical studies and
+      multimodal data to understand human states and behaviors in real-world
+      contexts.
+    projects:
+      - title: "Real-World In-Vehicle Environments"
+        theme: "Human–Environment Interaction"
+        description: >-
+          Characterizing in-vehicle temperature dynamics, spatial thermal
+          non-uniformity, and CO₂ exposure through naturalistic driving data to
+          reveal environmental challenges in everyday mobility.
+        featured_work: "CO₂ Exposure in Private Vehicles: Evidence from Naturalistic Driving"
+        links:
+          - label: "CO₂ exposure explorer"
+            url: "/co2-exposure-explorer/"
+
+      - title: "Environmental Effects on Driver States"
+        theme: "Human States & Behaviors"
+        description: >-
+          Investigating how cabin conditions influence comfort, alertness,
+          psychophysiological responses, driving behavior, and takeover
+          performance through controlled experiments and multimodal measures.
+
+      - title: "Dynamic Trust in Driverless Vehicles"
+        theme: "Human–Autonomy Interaction"
+        description: >-
+          Examining how passenger trust evolves during real-world rides in fully
+          driverless robotaxis, including how prior driving and automation
+          experience shape trust formation.
+
+  - id: enhancing
+    title: "Enhancing"
+    question: "How can technology better understand and support humans?"
+    description: >-
+      I explore how insights into human states and behaviors, combined with
+      emerging technologies, can inform intelligent sensing, adaptive
+      interventions, and interactive systems that enhance human well-being,
+      performance, and everyday experiences.
+    projects:
+      - title: "Disentangling Human States"
+        theme: "Intelligent Human State Monitoring"
+        description: >-
+          Exploring how drowsiness and thermal comfort can be disentangled from
+          multimodal physiological signals to improve robust and generalizable
+          human-state monitoring across people and environments.
+
+      - title: "Anticipatory Physical-State Interventions"
+        theme: "Proactive Human State Regulation"
+        description: >-
+          Studying anticipatory interventions, including localized seat heating,
+          that prepare drivers for transitions from automated to manual driving
+          and support readiness and subsequent control.
+
+      - title: "Multimodal Wearable AI"
+        theme: "Everyday Cognitive Augmentation"
+        description: >-
+          Exploring collaboration between smart glasses and wrist-worn devices
+          for selective multimodal sensing, everyday activity understanding, and
+          episodic-memory assistance.
+
+methods:
+  title: "Enabling Technologies & Methods"
+  description: >-
+    My research combines human-centered experimental methods, multimodal
+    sensing, statistical modeling, and machine learning, bridging empirical
+    understanding of humans with technology-enabled solutions.
+  items:
+    - title: "Multimodal Sensing"
+      detail: "Physiology · Vision · Motion · Audio"
+      icon: "fa-wave-square"
+    - title: "Computational Modeling"
+      detail: "Statistics · Machine Learning · AI"
+      icon: "fa-brain"
+    - title: "Human-Centered Research"
+      detail: "Field Studies · Experiments · Prototyping"
+      icon: "fa-flask"

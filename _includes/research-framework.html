@@ -1,0 +1,67 @@
+{% assign research = site.data.research %}
+
+<section class="research-framework" aria-labelledby="research-vision-title">
+  <header class="research-vision">
+    <p class="research-eyebrow">Research vision</p>
+    <h3 id="research-vision-title">{{ research.vision.title }}</h3>
+    <p>{{ research.vision.description }}</p>
+  </header>
+
+  <div class="research-tracks">
+    {% for track in research.tracks %}
+      <section class="research-track research-track--{{ track.id }}" aria-labelledby="research-track-{{ track.id }}">
+        <header class="research-track__header">
+          <h3 id="research-track-{{ track.id }}">{{ track.title }}</h3>
+          <p class="research-track__question">{{ track.question }}</p>
+          <p>{{ track.description }}</p>
+        </header>
+
+        <div class="research-projects">
+          {% for project in track.projects %}
+            <article class="research-project">
+              <p class="research-project__theme">{{ project.theme }}</p>
+              <h4>{{ project.title }}</h4>
+              <p>{{ project.description }}</p>
+
+              {% if project.featured_work %}
+                <p class="research-project__work">
+                  <span>Featured work</span>
+                  {{ project.featured_work }}
+                </p>
+              {% endif %}
+
+              {% if project.links %}
+                <div class="research-project__links" aria-label="Links for {{ project.title }}">
+                  {% for link in project.links %}
+                    <a href="{{ link.url | relative_url }}">{{ link.label }}</a>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </article>
+          {% endfor %}
+        </div>
+      </section>
+    {% endfor %}
+  </div>
+
+  <svg class="research-bridge" viewBox="0 0 600 42" aria-hidden="true" focusable="false">
+    <path d="M150 40 V9 M143 16 L150 9 L157 16 M450 40 V9 M443 16 L450 9 L457 16" />
+  </svg>
+
+  <section class="research-methods" aria-labelledby="research-methods-title">
+    <header>
+      <h3 id="research-methods-title">{{ research.methods.title }}</h3>
+      <p>{{ research.methods.description }}</p>
+    </header>
+
+    <div class="research-methods__grid">
+      {% for method in research.methods.items %}
+        <div class="research-method">
+          <i class="fas {{ method.icon }}" aria-hidden="true"></i>
+          <h4>{{ method.title }}</h4>
+          <p>{{ method.detail }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+</section>

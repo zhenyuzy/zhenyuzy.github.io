@@ -5,6 +5,9 @@ _site/
 # Ignore the directory for local files during development
 local/
 
+# Ignore private/local source materials used to prepare website updates
+source-materials/
+
 # Ignore the Gemfile that is generated
 Gemfile.lock
 
